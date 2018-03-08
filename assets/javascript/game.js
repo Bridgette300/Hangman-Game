@@ -1,14 +1,70 @@
-// Create variables for the guesses
+document.addEventListener("DOMContentLoaded", function(event) {
 
-let singer1 = "Beyonce";
-let singer2 = "Bruno Mars";
-let singer3 = "Michael Jackson";
-let singer4 = "Prince";
-let singer5 = "Shakira";
-let dashGuess = [];
+            
+        /** Variables **/
+        //first step: array of word options
+        //these are global variables!!!
+        let wordList = ['ghost', 'skeleton', 'pumpkin', 'bat', 'witch'];
+        let chosenWord = '';
+        let dashWord = [];
+        let userWins = 0;
+        let numberGuess = 10;
+        let wrongGuess = false;
 
-// Dash display for Singer 1: nBeyonce
-for (var i = 0; i < singer1.length; i++) {
-    dashGUess.push("_");
-}
+        /** functions **/
+        function createDashWord(word) {
+            let tmpDashWord = [];
+             //create the dashword array
+            for (var i = 0; i < word.length; i++) {
+                tmpDashWord.push("_");
+            }
+            return tmpDashWord;
 
+        }
+
+        function startGame() {
+            let chosenWord = wordList[Math.floor(Math.random() * wordList.length)];
+            dashWord = createDashWord(chosenWord);
+              //display dashWord
+           $('#dashDiv').text(dashWord.join(' '));
+           $('#winSpan').text(userWins);
+        }
+        
+        //init event
+        startGame();
+
+        /** events */
+
+        //page load
+        //keypress/keyup
+       
+        document.onkeyup = function(event) {
+            let letterGuessed = event.key.toLocaleLowerCase();
+          
+
+            //create if letter is in word
+            for (var i = 0; i < chosenWord.length; i++) {
+                if (letterGuessed === chosenWord[i]) {
+                    dashWord[i] = letterGuessed;
+                } else {
+                    wrongGuess = true;
+                }
+               }
+
+               if (wrongGuess === true) {
+                   numberGuess--;
+               }
+
+            // if dash word - chosen word you win
+            if (dashWord.join('') === chosenWord) {
+                userWins++;
+                //start new game here
+                startGame();
+            }
+
+            //display dashWord
+           $('#dashDiv').text(dashWord.join(' '));
+           $('#winSpan').text(numberGuess);
+        }
+
+});
